@@ -1,26 +1,44 @@
 #!/usr/bin/env elixir
 
-fb = fn(n) do
-	loop n do
-	match: 0
-		0
-	match: x
-		recur(x - 1)
-		case { rem(x, 5) == 0, rem(x, 3) == 0} do
-		match: {true, true}
-			IO.puts "FizzBuzz"
-		match: {true, false}
-			IO.puts "Buzz"
-		match: {false, true}
-			IO.puts "Fizz"
-		else:
-			IO.puts x
-		end
-	end
+defmodule FizzBuzz do
+
+  def compute(parent) do
+    compute(parent,1)
+  end
+
+  def compute(parent,n) when n > 99 do
+    parent <- :ok
+  end
+
+  def compute(parent,n) do
+    parent <- case {rem(n,3),rem(n,5)} do
+      {0,0} -> :fizzbuzz
+      {0,_} -> :fizz
+      {_,0} -> :buzz
+      {_,_} -> n
+    end
+     
+    compute(parent,n+1)
+  end
+
 end
 
+current_pid = Process.self
 
-fb.(100)
+spawn(fn ->
+  FizzBuzz.compute(current_pid)
+end)
+
+loop do
+  receive do
+    :ok -> :ok
+    fizzbuzz -> 
+     IO.inspect(fizzbuzz)
+     recur
+  after
+    10 -> :timeout
+  end
+end
 
 
 
