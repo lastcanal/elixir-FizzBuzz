@@ -18,7 +18,6 @@ defmodule FizzBuzz do
       {_,_} -> n
     end)
 
-     
     compute(n + 1)
   end
 
